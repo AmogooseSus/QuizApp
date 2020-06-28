@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<head>
+<title>Quiz Search</title>
+<link rel="stylesheet" type="text/css" href="/Styles/main.css" />
+</head>
+
+<style>
+
+.content-container
+{
+  min-height: 85vh;
+  max-height: auto;
+  width: 100vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 50px;
+}
+
+.Categories
+{
+  height: 80vh;
+  overflow-y: auto;
+  width: 30%;
+}
+
+.quizzes
+{
+  margin-top: 15px;
+  height: 80vh;
+  width: 65%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(12.5rem,1fr));
+  justify-items: center;
+  grid-gap: 20px;
+  overflow-y: auto;
+}
+
+.categories-labels
+{
+  height: 90%;
+  display: flex;
+  align-content: flex-start;
+  padding: 20px;
+  flex-wrap: wrap;
+  overflow-x: hidden;
+}
+
+.label
+{
+  height: 30px;
+  max-width: auto;
+  padding: 15px;
+  margin: 10px 5px;
+  word-break: keep-all;
+}
+
+@media (max-width: 800px)
+{
+  .content-container
+  {
+    flex-direction: column;
+    margin-top: 20px;
+    padding: 0 5px;
+  }
+
+  .Categories
+  {
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .quizzes
+  {
+    width: 80%;
+    min-height: 80vh;
+    max-height: auto;
+    overflow-y: visible;
+  }
+
+  .Categories
+  {
+    height: auto;
+  }
+}
+
+
+
+</style>
+
+<body class="bg-indigo-900">
+
+<%- include("../partials/Nav") %>
+
+<div class="content-container" >
+<div class=" Mobile:w-full  Categories" >
+<h1 class="text-center text-4xl p-2 text-blue-100">Categories</h1>
+<div class="categories-labels">
+<% Categories.forEach((category) =>
+{%>
+  <div class="label bg-blue-300 rounded-full flex justify-center items-center shadow-lg" id="<%= category.CategoryID %>">
+  <h3 class="text-blue-900 cursor-pointer"><%= category.CategoryName %></h3>
+  </div>
+<%})%>
+</div>
+
+</div>
+
+<div class=" quizzes">
+
+<!-- <div class="w-56 bg-blue-800 h-64 flex flex-col justify-around items-center rounded-lg shadow-lg p-2 cursor-pointer hover:bg-blue-900 relative">
+<h1 class="absolute text-5xl text-white" style="transform: rotate(-50deg);">Completed</h1>
+<h4 class="text-xl text-purple-100 text-center">General Knowledge</h4>
+<h2 class="text-3xl text-blue-200">Easy</h2>
+<div class="flex w-full justify-around">
+
+<div class="flex items-center">
+<h4 class="text-xl text-green-400">80</h4>
+<h3 class="text-xl text-green-500">P</h3>
+</div>
+
+<div class="flex items-center">
+<i class="fas fa-coins fa-lg text-orange-300"></i>
+<h4 class="text-xl text-yellow-500 mr-8 ">80</h4>
+</div>
+
+</div>
+</div> -->
+
+
+</div>
+</div>
+
+<script src="/Scripts/QuizSearch.js"> </script>
+</body>
+
+</html>

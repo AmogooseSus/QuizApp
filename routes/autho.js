@@ -81,7 +81,6 @@ router.post("/Register", (req,res) =>
              //save user
              newUser.save((err,user) =>
              {
-               console.log(user);
                if(err) throw err;
 
                sendEmail(newUser.Email,newUser.id,newUser.Username)
@@ -118,7 +117,7 @@ router.get("/logout", (req,res) =>
 
 async function sendEmail(email,userID,userName)
 {
- // create reusable transporter object using the default SMTP transport
+ // create reusable transporter object using gmail
  let transporter = nodemailer.createTransport({
   service: "gmail",
   auth:
@@ -130,9 +129,9 @@ async function sendEmail(email,userID,userName)
 
  // send mail with defined transport object
  let info = await transporter.sendMail({
-   from: '"Jill Bates👻" <harparkash73@gmail.com>', // sender address
+   from: '"Quiz app" <HelloHello931@gmail.com>', // sender address
    to: email, // list of receivers
-   subject: "Hello ✔", // Subject line
+   subject: "Hello,verify your account here for the quiz", // Subject line
    text: "Hello world?", // plain text body
    html: `<b><a href="https://youtube.com">CLICK HERE TO GET YOUR MILLION POUNDS REWARD FROM BILL GATES</a></b>`, // html body
  });

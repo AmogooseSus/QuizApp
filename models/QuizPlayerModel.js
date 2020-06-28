@@ -3,7 +3,11 @@ const Schema = mongoose.Schema;
 
 let Player = new Schema
 ({
-  Instance: Object,
+   QuestionAnswers: [ ],
+   QuizID: Schema.ObjectId,
+   CurrentQuestionIndex: Number,
+   CorrectAnswers: Number,
+   UserID: Schema.ObjectId,
 })
 
 let player = mongoose.model("players",Player);
