@@ -7,6 +7,6 @@ module.exports =
       return next();
     }
 
-    res.redirect("/home");
+    res.redirect("/autho/register");
   }
 }

@@ -12,11 +12,12 @@ module.exports = (passport) =>
     new localStrategy((username,password,done) =>
     {
       //check if user exists
-      user.findOne({UserName: username})
+      user.findOne({Username: username})
       .then(data =>
         {
           //if nothing is found then user doesnt exist
-          if(!data){ return done(null,false,{message : "email doesnt exist"});}
+          if(!data){ return done(null,false,{message : "Wrong Username"});}
+
 
 
           //if email is found compare the password with password stored in db
@@ -24,15 +25,19 @@ module.exports = (passport) =>
           {
             if(err) throw err;
             //if it matches then user has sucessfully been authenticated
-            if(isMatch)
+            if(isMatch && data.Verified)
             {
               //pass in data object that has all users data
               return done(null,data)
             }
+            else if(isMatch)
+            {
+              return done(null,false,{message: "Please verify your email"});
+            }
             else
             {
               //if not a match then password is wrong
-              return done(null,false, { message: "password wrong"});
+              return done(null,false, { message: "Wrong Password"});
             }
           });
         })
