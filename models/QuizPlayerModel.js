@@ -7,6 +7,7 @@ let Player = new Schema
    QuizID: Schema.ObjectId,
    CurrentQuestionIndex: Number,
    CorrectAnswers: Number,
+   IncorrectAnswers: [ ],
    UserID: Schema.ObjectId,
 })
 
