@@ -114,20 +114,25 @@ router.post("/CgetNextQuestion",async (req,res) =>
 
 router.post("/getNextQuestion",async (req,res) =>
 {
+  try
+  {
     let player = await QuizPlayer.findById(req.body.id);
 
     if(player.CurrentQuestionIndex + 1 > player.QuestionAnswers.length - 1 && player.CorrectAnswers >= 7)
     {
-      await giveUserRewards(player.QuizID,req.user);
+      let quiz = await Quiz.findById(player.QuizID);
+
+      await giveUserRewards(quiz.Points,quiz.Coins,req.user,quiz.id);
+
       await QuizPlayer.findByIdAndDelete(player.id);
 
-      return res.json({QuizComplete: true,Win: true});
+      return res.json({QuizComplete: true,Win: true,Coins: quiz.Coins,Points: quiz.Points});
     }
     else if(player.CurrentQuestionIndex + 1 > player.QuestionAnswers.length - 1)
     {
       await QuizPlayer.findByIdAndDelete(player.id);
 
-      return res.json({QuizComplete: true,Win: false});
+      return res.json({QuizComplete: true,Win: false,CorrectAnswers: player.CorrectAnswers});
     }
 
     if(player.QuestionAnswers[player.CurrentQuestionIndex].correct_answer === req.body.answer)
@@ -140,15 +145,19 @@ router.post("/getNextQuestion",async (req,res) =>
     await player.save()
 
     res.json({QuestionOBJ: player.QuestionAnswers[player.CurrentQuestionIndex]});
+
+  }
+  catch
+  {
+    
+  }
 })
 
-async function giveUserRewards(quizID,user)
+async function giveUserRewards(points,coins,user,quizID)
 {
-  let quiz = await Quiz.findById(quizID);
-
-  user.Points += quiz.Points;
-  user.Coins += quiz.Coins;
-  user.CompletedQuizzes.push(quiz.id);
+  user.Points += points;
+  user.Coins += coins;
+  user.CompletedQuizzes.push(quizID);
 
   await user.save();
 
