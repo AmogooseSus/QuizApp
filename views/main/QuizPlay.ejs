@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <head>
 <title>Player</title>
+<meta charset="utf-8">
+<meta charset="iso-8859-7">
 <link rel="styelsheet" type="text/css" href="/Styles/main.css" />
 <style>
 
@@ -157,8 +159,7 @@ function getNextQuestion(currentAnswer)
 
 function createUIForQuestion(question,answers)
 {
-  question.replace(/&#039;/g,"");
-  questionTitle.innerText = question.replace(/&quot;/g,"");
+  questionTitle.innerText = decodeText(question);
 
 
   answersContainer.innerHTML = " ";
@@ -167,7 +168,7 @@ function createUIForQuestion(question,answers)
   {
     let answerText = document.createElement("h2");
 
-    answerText.innerText = answer;
+    answerText.innerText = decodeText(answer);
 
     answerText.classList.add("text-lg", "bg-blue-200", "p-2", "w-3/4", "my-6","rounded-lg","hover:bg-blue-300","text-center","cursor-pointer","text-blue-900");
 
@@ -188,6 +189,14 @@ function redirectToSearch()
 function refreshPage()
 {
   window.location.href = window.location.href;
+}
+
+function decodeText(txt)
+{
+  let textArea = document.createElement("textarea");
+  textArea.innerHTML = txt;
+
+  return textArea.value;
 }
 
 </script>

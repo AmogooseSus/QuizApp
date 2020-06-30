@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<head>
+<title>Store</title>
+<link rel="stylesheet" type="text/css" href="/Styles/main.css" />
+</head>
+
+<style>
+
+.content-container
+{
+  min-height: 85vh;
+  max-height: auto;
+}
+
+.items
+{
+  min-height: 60vh;
+  max-height: auto;
+  width: 80%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(300px,1fr));
+  justify-items: center;
+  grid-row-gap: 20px;
+}
+
+.item
+{
+  width: 300px;
+  height: 350px;
+}
+
+</style>
+
+<body class="bg-indigo-900">
+
+<%- include("../partials/Nav") %>
+
+<div class="content-container w-full flex flex-col items-center justify-around">
+<h1 class="text-center text-5xl text-blue-100 mt-6">Shop</h1>
+
+<div class=" w-3/4 h-24 mb-12 mt-4 flex flex-col justify-around items-center">
+<h2 class="text-center text-2xl text-white">Your Funds</h2>
+<div class="flex justify-around items-baseline" style="width: 8%">
+<i class="fas fa-coins fa-lg text-orange-300"></i>
+<h3 class="text-xl text-yellow-400"><%= Coins %></h3>
+</div>
+</div>
+
+<div class="items">
+<% Items.forEach((item) =>
+{%>
+  <div class="item flex flex-col items-center justify-around p-4 bg-teal-600 shadow-2xl" id="<%= item.id %>">
+  <h1 class="text-center text-blue-800 text-2xl font-bold underline"><%= item.ItemName %></h1>
+  <h2 class="text-lg text-teal-900"><%= item.ItemDescription %></h2>
+  <div class="flex w-1/4 justify-around">
+  <i class="fas fa-coins fa-lg text-orange-300"></i>
+  <h3 class="text-lg text-yellow-400"><%= item.ItemPrice %></h3>
+  </div>
+  <% if(item.ItemType === "CategoryUpgrade" && CategoriesUnlocked.some(category =>
+  {
+    return category.CategoryID === item.ItemData[0].CategoryID;
+  }))
+  {%>
+    <button class="w-3/4 bg-blue-300  transition duration-500 text-lg rounded ">Already Bought</button>
+  <%}
+  else
+  {%>
+    <button class="buy-btn w-3/4 bg-blue-300 hover:bg-blue-500 transition duration-500 text-lg rounded hover:text-blue-100 ">Buy!</button>
+  <%}%>
+  </div>
+<%})%>
+</div>
+
+</div>
+
+<script src="/Scripts/shop.js"> </script>
+</body>
+
+</html>

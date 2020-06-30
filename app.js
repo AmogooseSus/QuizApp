@@ -60,18 +60,17 @@ app.use("/update",checkAutho.ensureAutho,require("./routes/update.js"));
 app.use("/quizPlayer",checkAutho.ensureAutho,require("./routes/player.js"));
 app.get("/makeQuiz",(req,res) =>
 {
-  // makeQuiz(14,"hard","Televison",15,80,20);
+  // makeQuiz(32,"hard","Cartoons",50,100,11);
 })
 
 async function makeQuiz(categoryID,difficulty,CategoryName,coinReward,pointsReward,amount)
 {
-  let token = "aa99ab35c077bc72e1290692bd59bf7b7b9af69e1101c8c6259f4ad305040e51";
+  let token = "e8f9cd3c262755c204785b2e0083ff97353245f1bceabdd5da8cf43d4eeddb82";
 
   fetch(`https://opentdb.com/api.php?amount=${amount}&token=${token}&category=${categoryID}&difficulty=${difficulty}&type=multiple`)
   .then(res => res.json())
   .then(async (data) =>
     {
-      console.log(data);
       if(data.response_code === 4 || data.response_code === 1 || data.response_code === 2) return console.log(data);
       let startingIndex = 0;
       let endingIndex = 10;
@@ -96,7 +95,7 @@ async function makeQuiz(categoryID,difficulty,CategoryName,coinReward,pointsRewa
         startingIndex += offsetIncrementer;
         endingIndex += offsetIncrementer;
 
-        console.log("1");
+        if(endingIndex === amount) console.log("done!");
       }
     })
   .catch(error => console.log(error))

@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Quiz = require("../models/Quiz.js");
+const Item = require("../models/Item.js");
 
 router.get("/home",(req,res) =>
 {
@@ -10,6 +11,13 @@ router.get("/home",(req,res) =>
 router.get("/quizSearch",(req,res) =>
 {
   res.render("main/QuizSearch",{Categories: req.user.CategoriesUnlocked});
+})
+
+router.get("/store",async (req,res) =>
+{
+  let items = await Item.find();
+
+  res.render("main/Shop",{Items: items,CategoriesUnlocked: req.user.CategoriesUnlocked,Coins: req.user.Coins});
 })
 
 router.post("/getQuizzes",(req,res) =>
