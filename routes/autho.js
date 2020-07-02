@@ -34,6 +34,10 @@ router.get("/verifyUser",(req,res) =>
       user.save()
       .then(() => {res.redirect("/autho/login")});
     })
+  .catch(() =>
+  {
+    res.redirect("/autho/register");
+  })
 })
 
 router.post("/Register", (req,res) =>

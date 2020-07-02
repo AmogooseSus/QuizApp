@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<head>
+<title>Community</title>
+<link rel="stylesheet" type="text/css" href="/Styles/main.css" />
+</head>
+
+<style>
+
+.content-container
+{
+  min-height: 85vh;
+  max-height: auto;
+}
+
+.quizzes
+{
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(350px,1fr));
+  justify-items: center;
+  height: auto;
+  grid-row-gap: 20px;
+}
+
+.card
+{
+  width: 350px;
+background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg id='hexagons' fill='%2375afbf' fill-opacity='0.73' fill-rule='nonzero'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  height: 200px;
+  padding: 20px;
+}
+
+.items
+{
+  min-height: 60vh;
+  max-height: auto;
+  width: 80%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(300px,1fr));
+  justify-items: center;
+  grid-row-gap: 20px;
+}
+
+
+
+</style>
+
+<body class="bg-indigo-900">
+
+<%- include("../partials/Nav") %>
+
+<div class="content-container w-full flex flex-col items-center content-center justify-start">
+<div class="flex flex-col w-full self-center items-center mt-6">
+<button class="w-1/5 bg-blue-200 text-lg rounded hover:bg-blue-500 m-6 px-2 py-1 Mobile:w-2/4">Create Your Own!</button>
+<input type="search" placeholder="Search" class="w-1/2 p-2 rounded-full text-center m-4 Mobile:w-3/4"/>
+</div>
+<div class="quizzes mt-6 w-full">
+<% Quizzes.forEach((quiz) =>
+{%>
+  <div class="card bg-teal-600 rounded hover:bg-teal-500 flex flex-col cursor-pointer" id="<%= quiz.id %>">
+  <h1 class="text-center break-words text-xl uppercase text-white"><%= quiz.Title %></h1>
+  <h2 class="text-center m-6 text-lg text-gray-200">Made By: <%= quiz.Username %></h2>
+  <h3 class="text-center m-3 text-white font-bold uppercase text-xl">Played: <%= quiz.AmountPlayed %> Times!</h3>
+  </div>
+<%})%>
+</div>
+
+<script>
+
+let btn = document.getElementsByTagName("button")[0];
+
+btn.addEventListener("click",() =>
+{
+  window.location.href = "/main/Creator";
+})
+
+<% if(Quizzes.length > 0)
+{%>
+  let quizzes = document.querySelectorAll(".card");
+
+  quizzes.forEach((quiz) =>
+  {
+    quiz.addEventListener("click",() =>
+    {
+      window.location.href = `/quizPlayer/Cplay?id=${quiz.id}`;
+    })
+  })
+<%}%>
+
+</script>
+</body>
+
+</html>

@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const itemHandler = require("../config/itemExecution.js");
 const Item = require("../models/Item.js");
+const CQuiz = require("../models/CQuiz.js");
 
 router.post("/buyItem",async (req,res) =>
 {
@@ -18,6 +19,30 @@ router.post("/buyItem",async (req,res) =>
   {
     res.json({Sucess: false});
   }
+})
+
+router.post("/makeCQuiz",(req,res) =>
+{
+  let newCQuiz = new CQuiz(
+    {
+      UserID: req.user.id,
+      QuestionAnswers: req.body.QuestionAnswers,
+      Title: req.body.Title,
+      AmountPlayed: 0,
+      Username: req.user.Username,
+    })
+
+  newCQuiz.save()
+  .then(() =>
+  {
+    req.user.CQuizzes.push(newCQuiz.id);
+
+    req.user.save()
+    .then(() =>
+    {
+      res.send({Sucess: true});
+    })
+  })
 })
 
 

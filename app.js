@@ -58,49 +58,49 @@ app.use("/main",checkAutho.ensureAutho,require("./routes/main.js"));
 app.use("/autho", require("./routes/autho.js"));
 app.use("/update",checkAutho.ensureAutho,require("./routes/update.js"));
 app.use("/quizPlayer",checkAutho.ensureAutho,require("./routes/player.js"));
-app.get("/makeQuiz",(req,res) =>
-{
-  // makeQuiz(32,"hard","Cartoons",50,100,11);
-})
-
-async function makeQuiz(categoryID,difficulty,CategoryName,coinReward,pointsReward,amount)
-{
-  let token = "e8f9cd3c262755c204785b2e0083ff97353245f1bceabdd5da8cf43d4eeddb82";
-
-  fetch(`https://opentdb.com/api.php?amount=${amount}&token=${token}&category=${categoryID}&difficulty=${difficulty}&type=multiple`)
-  .then(res => res.json())
-  .then(async (data) =>
-    {
-      if(data.response_code === 4 || data.response_code === 1 || data.response_code === 2) return console.log(data);
-      let startingIndex = 0;
-      let endingIndex = 10;
-      let offsetIncrementer = 10;
-
-      while(endingIndex <= amount)
-      {
-        let qas = data.results.slice(startingIndex,endingIndex);
-
-        let quiz = new Quiz(
-          {
-            CategoryID: categoryID,
-            CategoryName: CategoryName,
-            QuestionAnswers: qas,
-            Difficulty: difficulty,
-            Points: pointsReward,
-            Coins: coinReward,
-          })
-
-        await quiz.save()
-
-        startingIndex += offsetIncrementer;
-        endingIndex += offsetIncrementer;
-
-        if(endingIndex === amount) console.log("done!");
-      }
-    })
-  .catch(error => console.log(error))
-
-}
+// app.get("/makeQuiz",(req,res) =>
+// {
+//   // makeQuiz(32,"hard","Cartoons",50,100,11);
+// })
+//
+// async function makeQuiz(categoryID,difficulty,CategoryName,coinReward,pointsReward,amount)
+// {
+//   let token = "e8f9cd3c262755c204785b2e0083ff97353245f1bceabdd5da8cf43d4eeddb82";
+//
+//   fetch(`https://opentdb.com/api.php?amount=${amount}&token=${token}&category=${categoryID}&difficulty=${difficulty}&type=multiple`)
+//   .then(res => res.json())
+//   .then(async (data) =>
+//     {
+//       if(data.response_code === 4 || data.response_code === 1 || data.response_code === 2) return console.log(data);
+//       let startingIndex = 0;
+//       let endingIndex = 10;
+//       let offsetIncrementer = 10;
+//
+//       while(endingIndex <= amount)
+//       {
+//         let qas = data.results.slice(startingIndex,endingIndex);
+//
+//         let quiz = new Quiz(
+//           {
+//             CategoryID: categoryID,
+//             CategoryName: CategoryName,
+//             QuestionAnswers: qas,
+//             Difficulty: difficulty,
+//             Points: pointsReward,
+//             Coins: coinReward,
+//           })
+//
+//         await quiz.save()
+//
+//         startingIndex += offsetIncrementer;
+//         endingIndex += offsetIncrementer;
+//
+//         if(endingIndex === amount) console.log("done!");
+//       }
+//     })
+//   .catch(error => console.log(error))
+//
+// }
 
 
 

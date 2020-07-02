@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<head>
+<title>Creator</title>
+<link rel="stylesheet" type="text/css" href="/Styles/main.css" />
+</head>
+
+<style>
+
+.content-container
+{
+  min-height: 85vh;
+  max-height: auto;
+}
+
+</style>
+
+<body class="bg-indigo-900">
+
+<%- include("../partials/Nav") %>
+
+<% if(typeof error === "undefined")
+{%>
+  <div class="content-container w-full flex flex-col items-center justify-around creator hidden">
+  <input type="text" placeholder="Question" class="w-2/4 Mobile:w-3/4 px-2 py-1 text-lg rounded-full text-center" id="question"/>
+  <div class="flex flex-col w-2/4 Mobile:w-3/4">
+   <input type="text" placeholder="Correct Answer"  class=" px-2 py-1 text-lg rounded-full bg-green-400 focus:bg-green-500 text-white text-center my-4 placeholder-gray-200 outline-none" id="correct"/>
+   <input type="text" placeholder="Incorrect Answer" class=" px-2 py-1 text-lg rounded-full bg-red-400 focus:bg-red-500 text-white text-center my-4 placeholder-gray-200 outline-none wrong"/>
+   <input type="text" placeholder="Incorrect Answer" class=" px-2 py-1 text-lg rounded-full bg-red-400 focus:bg-red-500 text-white text-center my-4 placeholder-gray-200 outline-none wrong"/>
+   <input type="text" placeholder="Incorrect Answer" class=" px-2 py-1 text-lg rounded-full bg-red-400 focus:bg-red-500 text-white text-center my-4 placeholder-gray-200 outline-none wrong"/>
+  </div>
+  <buttton id="next-question" class="w-1/5 bg-blue-400 hover:bg-blue-600 px-2 py-1 rounded Mobile:w-2/5 text-center cursor-pointer">Next Question</button>
+  </div>
+
+  <div class="content-container w-full flex flex-col items-center justify-around initial-setup ">
+  <input type="text" id="title" placeholder="Quiz Title" class="w-2/4 px-2 py-1 rounded-full text-lg text-center Mobile:w-3/4"/>
+  <input type="number" id="amount" placeholder="Number Of Questions" class="w-2/4 px-2 py-1 rounded-full text-lg text-center Mobile:w-3/4"/>
+  <button id="initial-setup" class="w-1/5 bg-blue-400 hover:bg-blue-600 px-2 py-1 rounded Mobile:w-2/5">Continue</button>
+  </div>
+  <script src="/Scripts/Creator.js"> </script>
+<%}
+else
+{%>
+  <div class="content-container w-full flex flex-col items-center creator">
+   <h1 class="text-4xl font-bold text-blue-100 text-center break-words p-4 mt-4">Oops look likes you don't have enough slots left to make another quiz</h1>
+   <h2 class="font-thin text-3xl text-blue-200 text-center break-words p-4 mt-6">Please <span class="font-bold text-blue-100">purchase</span> more <span class="font-bold text-blue-100">slots</span> or <span class="font-bold  text-blue-100">delete</span> an existing quiz you've made to continue</h2>
+   <div class="flex w-4/12 justify-around mt-32 Mobile:w-4/5 Mobile:mt-6">
+   <a href="/main/store" class="text-xl bg-blue-200 px-2 py-1 w-32 text-center rounded hover:bg-blue-400 hover:text-blue-100">Store</a>
+   <a href="/main/profile" class="text-xl bg-blue-200 px-2 py-1 w-32 text-center rounded  hover:bg-blue-400 hover:text-blue-100">Profile</a>
+   </div>
+  </div>
+<%}%>
+</body>
+
+</html>

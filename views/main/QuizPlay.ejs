@@ -129,6 +129,7 @@ function getNextQuestion(currentAnswer)
   .then(res => res.json())
   .then(data =>
     {
+      console.log(data);
       //check if the data sent back has a QuizComplete property
       if(data.hasOwnProperty("QuizComplete"))
       {
@@ -138,8 +139,8 @@ function getNextQuestion(currentAnswer)
           document.querySelector(".overlay").classList.remove("hidden");
           document.querySelector(".win-popup").classList.remove("hidden");
 
-          document.querySelector("points-text").innerText = data.Points;
-          document.querySelector("coins-text").innerText = data.Coins;
+          document.querySelector(".points-text").innerText = data.Points;
+          document.querySelector(".coins-text").innerText = data.Coins;
 
           return;
         }

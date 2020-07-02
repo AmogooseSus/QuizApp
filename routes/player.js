@@ -48,7 +48,7 @@ router.get("/Cplay",async (req,res) =>
 
     if(potentialInstance)
     {
-      return res.render("main/QuizPlay",{Question: potentialInstance.QuestionAnswers[potentialInstance.CurrentQuestionIndex],PlayerID: potentialInstance.id})
+      return res.render("main/CQuizPlay",{Question: potentialInstance.QuestionAnswers[potentialInstance.CurrentQuestionIndex],PlayerID: potentialInstance.id})
     }
     else
     {
@@ -67,48 +67,63 @@ router.get("/Cplay",async (req,res) =>
 
       await player.save()
 
-      res.render("main/QuizPlay",{Question: player.QuestionAnswers[player.CurrentQuestionIndex],PlayerID: player.id});
+      res.render("main/CQuizPlay",{Question: player.QuestionAnswers[player.CurrentQuestionIndex],PlayerID: player.id});
     }
 
   }
   catch
   {
-    res.redirect("/main/quizSearch");
+    res.redirect("/main/Community");
   }
 
 })
 
 router.post("/CgetNextQuestion",async (req,res) =>
 {
-  let player = await QuizPlayer.findById(req.body.id);
-
-  if(player.CurrentQuestionIndex + 1 > player.QuestionAnswers.length)
+  try
   {
-    let cquiz = await CQuiz.findById(player.QuizID);
+    let player = await QuizPlayer.findById(req.body.id);
 
-    cquiz.AmountPlayed++;
+    if(player.QuestionAnswers[player.CurrentQuestionIndex].correct_answer === req.body.answer)
+    {
+      player.CorrectAnswers++;
+    }
+    else
+    {
+      player.IncorrectAnswers.push({Question: player.QuestionAnswers[player.CurrentQuestionIndex].question,Answer: player.QuestionAnswers[player.CurrentQuestionIndex].correct_answer});
+    }
 
-    await cquiz.save();
 
-    await QuizPlayer.findByIdAndDelete(player.id);
+    if(player.CurrentQuestionIndex + 1 > player.QuestionAnswers.length -1)
+    {
+      let cquiz = await CQuiz.findById(player.QuizID);
 
-    return res.json({QuizComplete: true,WrongAnswers: player.InncorrectAnswers});
+      cquiz.AmountPlayed++;
+
+      await cquiz.save();
+
+      await QuizPlayer.findByIdAndDelete(player.id);
+
+      if(req.user.CompletedQuizzes.indexOf(cquiz.id) === -1 || req.user.CQuizzes.indexOf(cquiz.id) === -1)
+      {
+        await giveUserRewards(15,20,req.user,cquiz.id);
+
+        return res.json({QuizComplete: true,WrongAnswers: player.IncorrectAnswers,Reward: true,CorrectAnswers:player.CorrectAnswers,QuizLength:player.QuestionAnswers.length });
+      }
+
+      return res.json({QuizComplete: true,WrongAnswers: player.IncorrectAnswers,Reward: false,CorrectAnswers: player.CorrectAnswers,QuizLength:player.QuestionAnswers.length});
+    }
+
+    player.CurrentQuestionIndex++;
+
+    await player.save();
+
+    res.json({QuestionOBJ: player.QuestionAnswers[player.CurrentQuestionIndex]});
   }
-
-  if(player.QuestionAnswers[player.CurrentQuestionIndex].correct_answer === req.body.answer)
+  catch
   {
-    player.CorrectAnswers++;
+
   }
-  else
-  {
-    player.InncorrectAnswers.push({Question: player.QuestionAnswers[player.CurrentQuestionIndex].question,Answer: player.QuestionAnswers[player.CurrentQuestionIndex].correct_answer});
-  }
-
-  player.CurrentQuestionIndex++;
-
-  await player.save()
-
-  res.json({QuestionOBJ: player.QuestionAnswers[player.CurrentQuestionIndex]});
 })
 
 
@@ -117,6 +132,11 @@ router.post("/getNextQuestion",async (req,res) =>
   try
   {
     let player = await QuizPlayer.findById(req.body.id);
+
+    if(player.QuestionAnswers[player.CurrentQuestionIndex].correct_answer === req.body.answer)
+    {
+      player.CorrectAnswers++;
+    }
 
     if(player.CurrentQuestionIndex + 1 > player.QuestionAnswers.length - 1 && player.CorrectAnswers >= 7)
     {
@@ -135,11 +155,6 @@ router.post("/getNextQuestion",async (req,res) =>
       return res.json({QuizComplete: true,Win: false,CorrectAnswers: player.CorrectAnswers});
     }
 
-    if(player.QuestionAnswers[player.CurrentQuestionIndex].correct_answer === req.body.answer)
-    {
-      player.CorrectAnswers++;
-    }
-
     player.CurrentQuestionIndex++;
 
     await player.save()
@@ -149,7 +164,7 @@ router.post("/getNextQuestion",async (req,res) =>
   }
   catch
   {
-    
+
   }
 })
 

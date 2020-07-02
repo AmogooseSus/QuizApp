@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 let CQuiz = new Schema(
   {
     UserID: Schema.ObjectId,
+    Username: String,
     QuestionAnswers: [ ],
     Title: String,
     AmountPlayed: Number
