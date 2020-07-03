@@ -3,10 +3,14 @@ const router = express.Router();
 const Quiz = require("../models/Quiz.js");
 const Item = require("../models/Item.js");
 const CQuiz = require("../models/CQuiz.js");
+const User = require("../models/User.js");
 
-router.get("/home",(req,res) =>
+router.get("/home",async (req,res) =>
 {
-  res.render("main/Home");
+  let topPlayers = await User.find().sort({Points: "descending"}).limit(10);
+  let topCommunityQuizzes = await CQuiz.find().sort({AmountPlayed: "descending"}).limit(10);
+
+  res.render("main/Home",{topPlayers,topCommunityQuizzes});
 })
 
 router.get("/quizSearch",(req,res) =>
@@ -81,5 +85,6 @@ async function getQuizzesViaCategoryID(id)
     return null;
   }
 }
+
 
 module.exports = router;

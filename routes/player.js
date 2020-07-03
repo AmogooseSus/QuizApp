@@ -103,8 +103,8 @@ router.post("/CgetNextQuestion",async (req,res) =>
       await cquiz.save();
 
       await QuizPlayer.findByIdAndDelete(player.id);
-
-      if(req.user.CompletedQuizzes.indexOf(cquiz.id) === -1 || req.user.CQuizzes.indexOf(cquiz.id) === -1)
+ 
+      if(req.user.CompletedQuizzes.indexOf(cquiz.id) === -1 && req.user.CQuizzes.indexOf(cquiz.id) === -1)
       {
         await giveUserRewards(15,20,req.user,cquiz.id);
 
