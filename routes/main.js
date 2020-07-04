@@ -8,7 +8,7 @@ const User = require("../models/User.js");
 router.get("/home",async (req,res) =>
 {
   let topPlayers = await User.find().sort({Points: "descending"}).limit(10);
-  let topCommunityQuizzes = await CQuiz.find().sort({AmountPlayed: "descending"}).limit(10);
+  let topCommunityQuizzes = await CQuiz.find().sort({AmountPlayed: "descending"}).limit(5);
 
   res.render("main/Home",{topPlayers,topCommunityQuizzes});
 })
