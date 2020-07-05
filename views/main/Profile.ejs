@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<head>
+<title>Home</title>
+<link rel="stylesheet" type="text/css" href="/Styles/main.css" />
+
+<style>
+
+.content-container
+{
+  height: 85vh;
+}
+
+.profile-card
+{
+  width: 30%;
+  min-height: 80%;
+  height: auto;
+  overflow-x: auto;
+}
+
+.tab-system
+{
+  width:60%;
+  height: 80%;
+
+}
+
+.tab-buttons
+{
+  height: 15%;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.tabs
+{
+  height: 80%;
+  overflow: auto;
+}
+
+.tab-buttons h2
+{
+  min-width: 150px;
+  width: auto;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bolder;
+  cursor: pointer;
+}
+
+.tab-buttons h2:first-child
+{
+  border-top-left-radius: 0.25rem;
+}
+
+.tab-buttons h2:last-child
+{
+  border-top-right-radius: 0.25rem;
+}
+
+@media (max-width: 500px)
+{
+  .content-container
+  {
+    height: 150vh;
+  }
+
+  .profile-card
+  {
+    min-height: 50vh;
+    width: 90%;
+  }
+
+  .tab-system
+  {
+    height: 80vh;
+  }
+}
+
+@media (min-height: 1000px)
+{
+  .profile-card
+  {
+    min-height: 50vh;
+  }
+
+  .tab-system
+  {
+    height: 40vh;
+  }
+}
+
+</style>
+
+</head>
+
+<body class="bg-indigo-900">
+
+<%- include("../partials/Nav") %>
+
+<div class="content-container flex items-center justify-around Mobile:flex-col">
+
+<div class="profile-card Mobile:w-10/12 bg-gray-200 rounded-lg shadow-xl flex flex-col items-center">
+<h1 class="text-center text-3xl font-bold p-2 mt-4 text-blue-800"><%= userInfo.Username %></h1>
+<div class="flex flex-col w-full p-4">
+
+<div class="flex items-center m-2">
+<h2 class="text-purple-800 text-xl font-bold">You have:</h2>
+  <div class="flex items-center ml-5">
+  <h4 class="text-2xl text-green-600"><%= userInfo.Points %></h4>
+  <h3 class="text-2xl text-green-700">P</h3>
+  </div>
+</div>
+
+<div class="flex items-center m-2">
+<h2 class="text-purple-800 text-xl font-bold">You have:</h2>
+<div class="flex items-center ml-5">
+<i class="fas fa-coins fa-lg text-orange-400"></i>
+<h4 class="text-2xl text-yellow-600 mr-8 "><%= userInfo.Coins %></h4>
+</div>
+</div>
+
+<div class="flex items-center m-2">
+<h2 class="text-purple-800 text-xl font-bold">You've Completed:</h2>
+<h4 class="ml-5 text-2xl text-blue-600 text-center"><%= userInfo.CompletedQuizzes.length %> Quizzes</h4>
+</div>
+
+<div class="flex items-center m-2">
+<h2 class="text-purple-800 text-xl font-bold">You've Got:</h2>
+<h4 class="ml-5 text-2xl text-blue-600 text-center"><%= userInfo.Friends.length %> Friends</h4>
+</div>
+
+<button class=" bg-red-500 hover:bg-red-600 w-1//3" onclick="logout()" style="margin-top: 30px;">Log Out</button>
+</div>
+</div>
+
+<div class="tab-system Mobile:w-11/12 bg-gray-300 rounded">
+
+<div class="tab-buttons flex items-center">
+<h2 class="text-lg text h-full bg-purple-400 text-white hover:bg-purple-700 text-center tb">My Quizzes</h2>
+<h2 class="text-lg text h-full bg-purple-400 text-white hover:bg-purple-700 text-center tb">My Friends</h2>
+<h2 class="text-lg text h-full bg-purple-400 text-white hover:bg-purple-700 text-center tb">My Friend Requests</h2>
+<h2 class="text-base text h-full bg-purple-400 text-white hover:bg-purple-700 text-center Mobile:text-sm flex-1 tb">Send A Friend Request!</h2>
+</div>
+
+<div class="tabs">
+
+<div class="quizzes h-full w-full ">
+<% userQuizzes.forEach((quiz) =>
+{%>
+  <div class="card bg-teal-600 rounded hover:bg-teal-500 flex flex-col cursor-pointer m-2 p-2 h-auto" id="<%= quiz.id %>">
+  <h1 class="text-center break-words text-xl uppercase text-white"><%= quiz.Title %></h1>
+  <h2 class="text-center m-6 text-lg text-gray-200">Made By: <%= quiz.Username %></h2>
+  <h3 class="text-center m-3 text-white font-bold uppercase text-xl">Played: <%= quiz.AmountPlayed %> Times!</h3>
+  </div>
+<%})%>
+</div>
+
+<div class="flex flex-col items-center hidden">
+<h1 class="text-2xl text-blue-800 text-center p-2">Click to see profile</h1>
+<% userFriends.forEach((request) =>
+{%>
+  <h1 class="text-center w-3/5 bg-blue-500 hover:bg-blue-800 cursor-pointer rounded hover:text-blue-100 mt-2 text-lg request" id="<%= request.id %>"><%= request.Username %></h1>
+<%})%>
+</div>
+
+<div class="flex flex-col items-center hidden">
+<h1 class="text-2xl text-blue-800 text-center p-2">Click to accept</h1>
+<% userFriendRequests.forEach((request) =>
+{%>
+  <h1 class="text-center w-3/5 bg-blue-500 hover:bg-blue-800 cursor-pointer rounded hover:text-blue-100 mt-2 text-lg request" id="<%= request.id %>"><%= request.Username %></h1>
+<%})%>
+</div>
+
+
+<div class="h-full w-full flex flex-col items-center justify-around hidden">
+<h1 id="send-message" class="text-xl text-blue-800"></h1>
+<input type="text" placeholder="Username" id="username" class="px-2 py-2 w-3/4 text-center rounded-full bg-gray-800 text-gray-100"/>
+<button id="send-request" class="px-2 py-1 w-2/5 bg-blue-600 text-blue-100 rounded Mobile:w-3/4 hover:bg-blue-700 transition duration-500">Send!<button>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const sendBtn = document.getElementById("send-request");
+const usernameInput = document.getElementById("username");
+const sendMessage = document.getElementById("send-message");
+
+const requests = document.querySelectorAll(".request");
+
+const tabs = document.querySelectorAll(".tb");
+
+
+sendBtn.addEventListener("click",() =>
+{
+  if(usernameInput.value.length > 0)
+  {
+    makeFriendRequest(usernameInput.value);
+  }
+})
+
+requests.forEach((request) =>
+{
+   request.addEventListener("click",() =>
+   {
+     acceptRequest(request.id);
+   })
+})
+
+tabs.forEach((tab,index) =>
+{
+  tab.addEventListener("click",() =>
+  {
+    displayTabData(index);
+  })
+})
+
+<% if(userQuizzes.length > 0)
+{%>
+  let quizzes = document.querySelectorAll(".card");
+
+  quizzes.forEach((quiz) =>
+  {
+    quiz.addEventListener("click",() =>
+    {
+      window.location.href = `/quizPlayer/Cplay?id=${quiz.id}`;
+    })
+  })
+<%}%>
+
+function makeFriendRequest(username)
+{
+  fetch("/update/makeFriendRequest",
+  {
+    headers:
+    {
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+    body: JSON.stringify({username})
+  })
+  .then(res => res.json())
+  .then(message =>
+    {
+      sendMessage.innerText = message.content;
+    })
+}
+
+function acceptRequest(userID)
+{
+  fetch("/update/acceptFriendRequest",
+  {
+    headers:
+    {
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+    body: JSON.stringify({userID})
+  })
+  .then(() =>
+  {
+    window.location.href = window.location.href;
+  })
+}
+
+function displayTabData(index)
+{
+  let sections = Array.from(document.querySelector(".tabs").children);
+
+  console.log(sections[index]);
+
+  sections.forEach((section,currentSection) =>
+  {
+    if(currentSection === index)
+    {
+      section.classList.remove("hidden");
+    }
+    else
+    {
+        section.classList.add("hidden");
+    }
+  })
+}
+
+function logout()
+{
+  window.location.href = "/autho/logout";
+}
+
+</script>
+</body>
+
+</html>

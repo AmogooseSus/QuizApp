@@ -114,7 +114,7 @@ router.post("/login",(req,res,next) =>
 router.get("/logout", (req,res) =>
 {
   req.logout();
-  res.redirect("/autho/verify");
+  res.redirect("/autho/login");
 
 })
 
@@ -135,9 +135,9 @@ async function sendEmail(email,userID,userName)
  let info = await transporter.sendMail({
    from: '"Quiz app" <HelloHello931@gmail.com>', // sender address
    to: email, // list of receivers
-   subject: "Hello,verify your account here for the quiz", // Subject line
-   text: "Hello world?", // plain text body
-   html: `<b><a href="https://youtube.com">CLICK HERE TO GET YOUR MILLION POUNDS REWARD FROM BILL GATES</a></b>`, // html body
+   subject: "Hello,verify your account here for the Quizz!", // Subject line
+   text: "Hi There!", // plain text body
+   html: `<b><a href="https://youtube.com">Please click here to verify your Quizz! account</a></b>`, // html body
  });
 
  return;

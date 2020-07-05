@@ -8,9 +8,8 @@ const User = require("../models/User.js");
 router.get("/home",async (req,res) =>
 {
   let topPlayers = await User.find().sort({Points: "descending"}).limit(10);
-  let topCommunityQuizzes = await CQuiz.find().sort({AmountPlayed: "descending"}).limit(5);
 
-  res.render("main/Home",{topPlayers,topCommunityQuizzes});
+  res.render("main/Home",{topPlayers});
 })
 
 router.get("/quizSearch",(req,res) =>
@@ -42,13 +41,21 @@ router.get("/Creator",(req,res) =>
   res.render("main/Creator");
 })
 
+router.get("/profile",async (req,res) =>
+{
+  let userQuizzes = await CQuiz.find({UserID: req.user.id}).sort({AmountPlayed: "descending"});
+  let userFriends = await getUsers(req.user.Friends);
+  let userFriendRequests = await getUsers(req.user.FriendRequests);
+
+  res.render("main/Profile",{userInfo: req.user,userFriends,userFriendRequests,userQuizzes});
+})
+
 router.post("/getQuizzes",(req,res) =>
 {
   //determine if user has acess to the quiz category
   if(determineAcessToCategory(req.user,req.body.categoryID))
   {
     //find quizzes via the category and send them
-
     getQuizzesViaCategoryID(req.body.categoryID)
     .then(data =>
       {
@@ -86,5 +93,22 @@ async function getQuizzesViaCategoryID(id)
   }
 }
 
+async function getUsers(collectionOfIDs)
+{
+  let users = [ ];
+
+  let getData = collectionOfIDs.map(id =>
+    {
+      return User.findById(id)
+      .then((data) =>
+      {
+        users.push(data);
+      })
+    })
+
+  await Promise.all(getData)
+
+  return users;
+}
 
 module.exports = router;
