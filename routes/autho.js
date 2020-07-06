@@ -87,7 +87,7 @@ router.post("/Register", (req,res) =>
              {
                if(err) throw err;
 
-               sendEmail(newUser.Email,newUser.id,newUser.Username)
+               sendEmail(newUser.Email,newUser.id,newUser.Username,newUser)
                .then(() =>
                {
                     res.render("autho/register",{message : "Please check your email and verify your account to log in", type: "sucess"});
@@ -119,28 +119,40 @@ router.get("/logout", (req,res) =>
 })
 
 
-async function sendEmail(email,userID,userName)
+async function sendEmail(email,userID,userName,user)
 {
- // create reusable transporter object using gmail
- let transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth:
+  try
   {
-    user: "harparkash73@gmail.com",
-    pass: process.env.googlePassword,
+    // create reusable transporter object using gmail
+    let transporter = nodemailer.createTransport({
+     service: "gmail",
+     auth:
+     {
+       user: "harparkash73@gmail.com",
+       pass: process.env.googlePassword,
+     }
+    });
+
+    // send mail with defined transport object
+    let info = await transporter.sendMail({
+      from: '"Quiz app" <harparkash73@gmail.com>', // sender address
+      to: email, // list of receivers
+      subject: "Hello,verify your account here for the Quizz!", // Subject line
+      text: "Hi There!", // plain text body
+      html: `<b><a href="https://quizz9231.herokuapp.com/autho/verifyUser?id=${userID}">Please click here to verify your Quizz! account</a></b>`, // html body
+    });
+
+    return
   }
- });
+  catch
+  {
+    user.Verified = true;
 
- // send mail with defined transport object
- let info = await transporter.sendMail({
-   from: '"Quiz app" <HelloHello931@gmail.com>', // sender address
-   to: email, // list of receivers
-   subject: "Hello,verify your account here for the Quizz!", // Subject line
-   text: "Hi There!", // plain text body
-   html: `<b><a href="https://quizz9231.herokuapp.com/autho/verifyUser?id=${userID}">Please click here to verify your Quizz! account</a></b>`, // html body
- });
+    await user.save();
 
- return;
+    return;
+  }
+
 }
 
 module.exports = router;
