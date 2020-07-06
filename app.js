@@ -6,12 +6,12 @@ const configPassport = require("./config/passport.js")(passport);
 const checkAutho = require("./config/autho.js");
 const mongoStore = require("connect-mongo")(session);
 const fetch = require("node-fetch");
-const superSecretOBJ = require("./config/config.js");
+require('dotenv').config();
 const flash = require("connect-flash");
 const Quiz = require("./models/Quiz.js");
 
 
-const uri = superSecretOBJ.mongoURI;
+const uri = process.env.mongoURI;
 
 //initlise express
 let app = express();
@@ -33,7 +33,7 @@ db.once("open" , () =>
 
 //configures session
 app.use(session({
-  secret: superSecretOBJ.sessionSecret,
+  secret: process.env.sessionSecret,
   resave: true,
   saveUninitialized: true,
   store: new mongoStore({ mongooseConnection : db }),

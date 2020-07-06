@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const passport = require("passport");
 const User = require("../models/User.js");
 const nodemailer = require("nodemailer");
-const superSecretOBJ = require("../config/config.js");
+require('dotenv').config()
 
 router.get("/register", (req,res) =>
 {
@@ -127,7 +127,7 @@ async function sendEmail(email,userID,userName)
   auth:
   {
     user: "harparkash73@gmail.com",
-    pass: superSecretOBJ.googlePassword,
+    pass: process.env.googlePassword,
   }
  });
 

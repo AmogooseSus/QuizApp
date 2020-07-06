@@ -50,6 +50,20 @@ router.get("/profile",async (req,res) =>
   res.render("main/Profile",{userInfo: req.user,userFriends,userFriendRequests,userQuizzes});
 })
 
+router.get("/otherProfile",async (req,res) =>
+{
+  try
+  {
+    let otherUser =  await User.findById(req.query.id);
+
+    res.render("main/Profile",{otherUser});
+  }
+  catch
+  {
+    res.redirect("/main/home");
+  }
+})
+
 router.post("/getQuizzes",(req,res) =>
 {
   //determine if user has acess to the quiz category
