@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <head>
-<title>Home</title>
+<title>Profile</title>
 <link rel="stylesheet" type="text/css" href="/Styles/main.css" />
 
 <style>
@@ -132,14 +132,14 @@
 <h4 class="ml-5 text-2xl text-blue-600 text-center"><%= userInfo.Friends.length %> Friends</h4>
 </div>
 
-<button class=" bg-red-500 hover:bg-red-600 w-1//3" onclick="logout()" style="margin-top: 30px;">Log Out</button>
+<button class=" bg-red-500 hover:bg-red-600 w-5/6 self-center py-1 rounded text-red-100" onclick="logout()" style="margin-top: 30px;">Log Out</button>
 </div>
 </div>
 
 <div class="tab-system Mobile:w-11/12 bg-gray-300 rounded">
 
 <div class="tab-buttons flex items-center">
-<h2 class="text-lg text h-full bg-purple-400 text-white hover:bg-purple-700 text-center tb">My Quizzes</h2>
+<h2 class="text-lg text h-full bg-purple-700 text-white hover:bg-purple-700 text-center tb">My Quizzes</h2>
 <h2 class="text-lg text h-full bg-purple-400 text-white hover:bg-purple-700 text-center tb">My Friends</h2>
 <h2 class="text-lg text h-full bg-purple-400 text-white hover:bg-purple-700 text-center tb">My Friend Requests</h2>
 <h2 class="text-base text h-full bg-purple-400 text-white hover:bg-purple-700 text-center Mobile:text-sm flex-1 tb">Send A Friend Request!</h2>
@@ -162,7 +162,7 @@
 <h1 class="text-2xl text-blue-800 text-center p-2">Click to see profile</h1>
 <% userFriends.forEach((request) =>
 {%>
-  <h1 class="text-center w-3/5 bg-blue-500 hover:bg-blue-800 cursor-pointer rounded hover:text-blue-100 mt-2 text-lg request" id="<%= request.id %>"><%= request.Username %></h1>
+  <h1 class="text-center w-3/5 bg-blue-500 hover:bg-blue-800 cursor-pointer rounded hover:text-blue-100 mt-2 text-lg friend" id="<%= request.id %>"><%= request.Username %></h1>
 <%})%>
 </div>
 
@@ -197,6 +197,8 @@ const requests = document.querySelectorAll(".request");
 
 const tabs = document.querySelectorAll(".tb");
 
+const friends = document.querySelectorAll(".friend");
+
 
 sendBtn.addEventListener("click",() =>
 {
@@ -219,6 +221,15 @@ tabs.forEach((tab,index) =>
   tab.addEventListener("click",() =>
   {
     displayTabData(index);
+    styleSelectedTab(index);
+  })
+})
+
+friends.forEach((friend) =>
+{
+  friend.addEventListener("click",() =>
+  {
+    window.location.href = `/main/otherProfile?id=${friend.id}`;
   })
 })
 
@@ -274,8 +285,6 @@ function displayTabData(index)
 {
   let sections = Array.from(document.querySelector(".tabs").children);
 
-  console.log(sections[index]);
-
   sections.forEach((section,currentSection) =>
   {
     if(currentSection === index)
@@ -285,6 +294,23 @@ function displayTabData(index)
     else
     {
         section.classList.add("hidden");
+    }
+  })
+}
+
+function styleSelectedTab(index)
+{
+  tabs.forEach((tab,tindex) =>
+  {
+    if(tindex === index)
+    {
+      tab.classList.add("bg-purple-700");
+      tab.classList.remove("bg-purple-400");
+    }
+    else
+    {
+      tab.classList.remove("bg-purple-700");
+      tab.classList.add("bg-purple-400");
     }
   })
 }

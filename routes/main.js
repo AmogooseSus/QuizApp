@@ -54,9 +54,11 @@ router.get("/otherProfile",async (req,res) =>
 {
   try
   {
-    let otherUser =  await User.findById(req.query.id);
+    let userInfo =  await User.findById(req.query.id);
+    let userQuizzes = await CQuiz.find({UserID: req.query.id}).sort({AmountPlayed: "descending"});
+    let userFriends = await getUsers(userInfo.Friends);
 
-    res.render("main/Profile",{otherUser});
+    res.render("main/OtherProfile",{userInfo,userQuizzes,userFriends,viewingUser: req.user});
   }
   catch
   {

@@ -137,7 +137,7 @@ async function sendEmail(email,userID,userName)
    to: email, // list of receivers
    subject: "Hello,verify your account here for the Quizz!", // Subject line
    text: "Hi There!", // plain text body
-   html: `<b><a href="https://youtube.com">Please click here to verify your Quizz! account</a></b>`, // html body
+   html: `<b><a href="https://quizz9231.herokuapp.com/autho/verifyUser?id=${userID}">Please click here to verify your Quizz! account</a></b>`, // html body
  });
 
  return;
